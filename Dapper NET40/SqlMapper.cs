@@ -708,15 +708,17 @@ namespace Dapper
             {
                 return DbType.Binary;
             }
+			
+			if (typeHandlers.TryGetValue(type, out handler))
+            {
+                return DbType.Object;
+            }
+			
             if (typeof(IEnumerable).IsAssignableFrom(type))
             {
                 return DynamicParameters.EnumerableMultiParameter;
             }
 
-            if (typeHandlers.TryGetValue(type, out handler))
-            {
-                return DbType.Object;
-            }
             throw new NotSupportedException(string.Format("The member {0} of type {1} cannot be used as a parameter value", name, type));
         }
 
